@@ -1,0 +1,2 @@
+rootProject.name = "BetterGFN"
+include ':app'
