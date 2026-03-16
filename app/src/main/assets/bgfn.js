@@ -214,7 +214,7 @@
       <div style="display:flex;justify-content:center;padding:10px 0 0;"><div style="width:36px;height:4px;background:#333;border-radius:2px;"></div></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px 8px;position:sticky;top:0;background:#0d1117;z-index:1;border-bottom:1px solid #1c2128;">
         <div style="display:flex;align-items:center;gap:8px;">
-          <div style="width:8px;height:8px;background:#76b900;border-radius:50%;box-shadow:0 0 6px #76b900;"></div>
+          <img src="https://raw.githubusercontent.com/karmadev0/better-geforce-now/main/assets/logo.png" style="width:22px;height:22px;border-radius:4px;object-fit:cover;" onerror="this.style.display='none'">
           <span style="font-size:13px;font-weight:bold;color:#76b900;letter-spacing:2px;">BETTER GFN</span>
           <span style="font-size:9px;color:#444;">v1.0.1</span>
         </div>
@@ -355,21 +355,39 @@
     ['bgfn-status','bgfn-float-status'].forEach(id=>{const el=get(id);if(el){el.textContent=t[m]||'';el.style.color=c[m]||'#555';}});
   }
 
-  // ── FULLSCREEN — detectado por viewport height ──────────────────────────
-  // Kiwi en landscape: width y height se invierten, usamos el mayor de los dos
-  // Normal ~791px | barra oculta ~857px | fullscreen ~947px → threshold >900
+  // ── FULLSCREEN ─────────────────────────────────────────────────────────────
+  // Móvil (Kiwi): detectado por viewport height >900px (landscape rota los ejes)
+  // PC: detectado por hash URL #/streamer = en juego, cualquier otro = fuera
   function watchFullscreen() {
     let fsTimer=null;
     function applyFS(s) { if(s===isFullscreen)return; isFullscreen=s; updateLayout(); }
+
+    function isStreamerHash() { return location.hash.includes('/streamer'); }
+
     function checkFS() {
+      if (!inGame) { if(isFullscreen) applyFS(false); return; }
+
+      // PC: usar hash URL como señal principal
+      const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+      if (!isMobile) {
+        const nowFS = isStreamerHash();
+        clearTimeout(fsTimer);
+        if(nowFS && !isFullscreen) applyFS(true);
+        else if(!nowFS && isFullscreen) fsTimer=setTimeout(()=>{ if(!isStreamerHash()) applyFS(false); },500);
+        return;
+      }
+
+      // Móvil: usar viewport height (Kiwi rota ejes en landscape)
       const bigger=Math.max(window.innerWidth,window.innerHeight);
-      const nowFS=inGame&&bigger>900;
+      const nowFS=bigger>900;
       clearTimeout(fsTimer);
       if(nowFS&&!isFullscreen) applyFS(true);
-      else if(!nowFS&&isFullscreen) fsTimer=setTimeout(()=>{ if(Math.max(window.innerWidth,window.innerHeight)<=900)applyFS(false); },2000);
+      else if(!nowFS&&isFullscreen) fsTimer=setTimeout(()=>{ if(Math.max(window.innerWidth,window.innerHeight)<=900) applyFS(false); },2000);
     }
-    window.addEventListener('resize',checkFS);
-    setInterval(checkFS,800);
+
+    window.addEventListener('hashchange', checkFS);
+    window.addEventListener('resize', checkFS);
+    setInterval(checkFS, 800);
   }
 
   // ── INYECTAR MINI DENTRO DEL CANVAS DEL STREAM ─────────────────────────
@@ -405,6 +423,108 @@
   document.addEventListener('DOMContentLoaded',tryInit);
   new MutationObserver(tryInit).observe(document.documentElement||document,{childList:true});
   GAMEPAD.init(); watchSW(); watchVideo(); watchFullscreen(); watchStreamContainer();
-  setInterval(tick,1000);
+
+  // ── AUTOUPDATER ────────────────────────────────────────────────────────────
+  // Tampermonkey: usa @updateURL/@downloadURL automáticamente
+  // Kiwi ZIP y APK: descarga el nuevo bgfn.js, lo guarda en localStorage
+  // y lo ejecuta en el próximo load sin reinstalar nada
+  const BGFN_VERSION = '1.0.1';
+  const BGFN_SCRIPT_URL = 'https://github.com/karmadev0/better-geforce-now/releases/latest/download/better-gfn.user.js';
+  const BGFN_API_URL = 'https://api.github.com/repos/karmadev0/better-geforce-now/releases/latest';
+
+  function compareSemver(a, b) {
+    const pa = a.split('.').map(Number);
+    const pb = b.split('.').map(Number);
+    for (let i = 0; i < 3; i++) {
+      if ((pa[i]||0) > (pb[i]||0)) return 1;
+      if ((pa[i]||0) < (pb[i]||0)) return -1;
+    }
+    return 0;
+  }
+
+  function showUpdateBanner(latest) {
+    // Quitar banner anterior si existe
+    const old = document.getElementById('bgfn-update-banner');
+    if (old) old.remove();
+
+    const banner = document.createElement('div');
+    banner.id = 'bgfn-update-banner';
+    banner.style.cssText = 'background:#1c3a00;border:1px solid #76b900;border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;gap:8px;margin:14px 18px 0;';
+    banner.innerHTML = `
+      <div>
+        <div style="font-size:11px;color:#76b900;font-weight:bold;">⬆ Nueva versión disponible: v${latest}</div>
+        <div style="font-size:10px;color:#888;margin-top:2px;">Versión instalada: v${BGFN_VERSION}</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button id="bgfn-update-now" style="flex:1;background:#76b900;color:#000;border:none;border-radius:5px;padding:7px;font-family:monospace;font-size:10px;font-weight:bold;cursor:pointer;">⬇ ACTUALIZAR AHORA</button>
+        <a href="https://github.com/karmadev0/better-geforce-now/releases/latest" target="_blank" style="flex:1;background:#21262d;color:#76b900;border:1px solid #76b900;border-radius:5px;padding:7px;font-family:monospace;font-size:10px;font-weight:bold;cursor:pointer;text-decoration:none;text-align:center;">VER RELEASE</a>
+      </div>
+      <div id="bgfn-update-status" style="font-size:9px;color:#555;text-align:center;display:none;"></div>
+    `;
+
+    const panel = get('bgfn-panel');
+    if (panel) panel.insertBefore(banner, panel.firstChild);
+
+    document.getElementById('bgfn-update-now')?.addEventListener('click', () => downloadAndApplyUpdate(latest));
+  }
+
+  function downloadAndApplyUpdate(latest) {
+    const btn = document.getElementById('bgfn-update-now');
+    const status = document.getElementById('bgfn-update-status');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Descargando...'; }
+    if (status) { status.style.display = 'block'; status.textContent = 'Descargando nueva versión...'; }
+
+    fetch(BGFN_SCRIPT_URL)
+      .then(r => {
+        if (!r.ok) throw new Error('Error al descargar');
+        return r.text();
+      })
+      .then(code => {
+        // Guardar en localStorage
+        try {
+          localStorage.setItem('bgfn_cached_script', code);
+          localStorage.setItem('bgfn_cached_version', latest);
+        } catch(_) {}
+
+        if (status) status.textContent = '✓ Actualización descargada — recarga la página para aplicarla';
+        if (btn) { btn.textContent = '↺ RECARGAR AHORA'; btn.disabled = false; btn.onclick = () => location.reload(); }
+        showToast(`✓ v${latest} descargada — recarga para aplicar`, 'ok', 5000);
+      })
+      .catch(() => {
+        if (status) status.textContent = '✗ Error al descargar — intenta desde la release';
+        if (btn) { btn.textContent = '⬇ REINTENTAR'; btn.disabled = false; btn.onclick = () => downloadAndApplyUpdate(latest); }
+      });
+  }
+
+  // Al cargar, verificar si hay script cacheado más nuevo y ejecutarlo
+  function checkCachedUpdate() {
+    try {
+      const cachedVersion = localStorage.getItem('bgfn_cached_version');
+      const cachedScript = localStorage.getItem('bgfn_cached_script');
+      if (cachedVersion && cachedScript && compareSemver(cachedVersion, BGFN_VERSION) > 0) {
+        console.log('[BGFN] Aplicando versión cacheada:', cachedVersion);
+        const script = document.createElement('script');
+        script.textContent = cachedScript;
+        document.head.appendChild(script);
+        return true; // Script nuevo ya ejecutado
+      }
+    } catch(_) {}
+    return false;
+  }
+
+  // Consultar GitHub API para versión nueva
+  setTimeout(() => {
+    fetch(BGFN_API_URL)
+      .then(r => r.json())
+      .then(data => {
+        const latest = data.tag_name?.replace('v','');
+        if (latest && compareSemver(latest, BGFN_VERSION) > 0) {
+          showUpdateBanner(latest);
+          showToast(`⬆ Nueva versión v${latest} disponible`, 'ok', 6000);
+        }
+      }).catch(() => {});
+  }, 4000);
+
+  setInterval(tick, 1000);
 
 })();
