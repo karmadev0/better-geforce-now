@@ -17,7 +17,7 @@ La idea principal está inspirada en [**Better xCloud**](https://github.com/redp
 
 ---
 
-## Features actuales (v1.0.0)
+## Features actuales (v1.0.1)
 
 ### Timer de sesión
 - Reloj en tiempo real siempre visible
@@ -25,6 +25,7 @@ La idea principal está inspirada en [**Better xCloud**](https://github.com/redp
 - Tiempo restante con barra de progreso
 - Alertas automáticas a los 50 min (amarillo) y 55 min (rojo)
 - Reset automático cuando GFN se reinicia
+- **Timer persistente** — si recargas la página la sesión continúa desde donde estaba
 
 ### (inestable) Eludir bloqueo de región
 - Por los momentos no funciona como better xcloud de que se hace todo en la app pero tenemos avisos visibles sobre el que hacer con tu propia vpn
@@ -53,13 +54,13 @@ La idea principal está inspirada en [**Better xCloud**](https://github.com/redp
 
 ### Opción A — Extensión para Chrome
 1. Descarga el ZIP de la última release
-2. Abre tu navegador in-browser → `chrome://extensions/`
+2. Abre tu navegador in-Chrome → `chrome://extensions/`
 3. Activa **Modo desarrollador**
 4. Click en **`+ (from .zip/.crx/.user.js)`**
 5. Selecciona el ZIP descargado
 
 ### Opción B — APK Android (este repo)
-1. Ve a la ultima versión de Releases y busca el archivo APk 
+1. Ve a la ultima versión de Releases y busca el archivo APK
 2. Instala el APK en tu dispositivo (necesitas permitir fuentes desconocidas)
 
 ---
@@ -85,7 +86,7 @@ Por los momentos estos son los que quiero agregar, si quieren darme ideas, soy t
 - Ping en tiempo real a cada servidor disponible
 - Recordar servidor preferido por juego
 - Poder eludir el bloqueo de ip directamente en la misma app
-- selector de servidor con ping para dar el mejor servidor de GFN para jugar, en base a su cola y su ping
+- Selector de servidor con ping para dar el mejor servidor de GFN para jugar, en base a su cola y su ping
 
 ### Personalización del entorno GFN
 - Temas visuales para la interfaz de GFN (colores, fondos)
