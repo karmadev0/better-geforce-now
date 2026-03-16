@@ -52,16 +52,22 @@ La idea principal está inspirada en [**Better xCloud**](https://github.com/redp
 
 ## Instalación
 
-### Opción A — Extensión para Chrome
+### Opción A — Extensión por ZIP
 1. Descarga el ZIP de la última release
-2. Abre tu navegador in-Chrome → `chrome://extensions/`
+2. Abre tu chrome-Browser → `chrome://extensions/`
 3. Activa **Modo desarrollador**
 4. Click en **`+ (from .zip/.crx/.user.js)`**
 5. Selecciona el ZIP descargado
 
-### Opción B — APK Android (este repo)
-1. Ve a la ultima versión de Releases y busca el archivo APK
-2. Instala el APK en tu dispositivo (necesitas permitir fuentes desconocidas)
+### Opción B — Tampermonkey (PC Alternativa por si acaso)
+1. Instala [Tampermonkey](https://www.tampermonkey.net/) desde la tienda de extensiones de tu navegador
+2. Abre el archivo `.user.js` de la última release
+3. Tampermonkey detecta el script automáticamente y te pide confirmación
+4. Click en **Instalar**
+
+### Opción C — APK Android
+1. Ve a la última versión de Releases y busca el archivo APK
+2. Instala el APK en tu dispositivo (necesitas permitir fuentes desconocidas) 
 
 ---
 
