@@ -5,7 +5,7 @@
 <h1 align="center">Better GFN</h1>
 
 <p align="center">
-  Mejoras de experiencia para GeForce NOW en navegador y Android<br>
+  Experience improvements for GeForce NOW on browser and Android<br>
   by <strong>Karmadev0</strong>
 </p>
 
@@ -25,141 +25,174 @@
 </p>
 
 <p align="center">
-  <a href="#instalación">
-    <img src="https://img.shields.io/badge/⬇%20INSTALAR-76b900?style=for-the-badge&labelColor=0d1117" alt="Instalar">
+  <a href="#installation">
+    <img src="https://img.shields.io/badge/⬇%20INSTALL-76b900?style=for-the-badge&labelColor=0d1117" alt="Install">
   </a>
 </p>
 
 ---
 
-## ¿Qué es Better GFN?
+## What is Better GFN?
 
-Better GFN es una extensión de navegador y aplicación Android que mejora la experiencia de juego en [GeForce NOW](https://play.geforcenow.com) — el servicio de cloud gaming de NVIDIA.
+Better GFN is a browser extension and Android application that improves the gaming experience on [GeForce NOW](https://play.geforcenow.com) — NVIDIA's cloud gaming service.
 
-La idea principal está inspirada en [**Better xCloud**](https://github.com/redphx/better-xcloud) de **@redphx**, un proyecto increíble que hace lo mismo para Xbox Cloud Gaming. Todo el crédito del concepto original pertenece a ese proyecto. Better GFN es una adaptación independiente orientada específicamente a GeForce NOW.
-
----
-
-## Features actuales (v1.0.2)
-
-### Timer de sesión
-- Reloj en tiempo real siempre visible
-- Contador de tiempo de sesión activa
-- Tiempo restante con barra de progreso
-- Alertas automáticas a los 50 min (amarillo) y 55 min (rojo)
-- Reset automático cuando GFN se reinicia
-- Timer persistente — si recargas la página la sesión continúa desde donde estaba
-
-### (inestable) Eludir bloqueo de región
-- Avisos visibles sobre qué hacer con tu propia VPN
-- Aviso automático cuando la sesión se establece: **"Ya puedes desconectar tu VPN"**
-
-### Optimización de mando
-- Detección automática del tipo de mando: Xbox, PlayStation, Nintendo, Genérico
-- Remapeo de botones al estándar Xbox que GFN espera
-- **High-frequency polling** ajustable para reducir input lag en Bluetooth:
-  - Nativo (~60 Hz)
-  - Alto (~120 Hz)
-  - Ultra (~250 Hz) — recomendado para BT
-  - Max (sin límite)
-- Opción A↔B para mandos PlayStation
-
-### UI adaptativa
-- Mini widget en esquina superior izquierda durante el juego en fullscreen
-- Widget flotante con info completa fuera de fullscreen pero dentro del juego
-- Botón FAB `⚙ BETTER GFN` en el menú principal
-- Panel deslizable desde abajo con toda la configuración
-- Toda la configuración se guarda automáticamente
-
-### Autoupdater
-- El script se actualiza automáticamente sin reinstalar nada
-- Aviso en el panel cuando hay una nueva versión disponible
-- Descarga y aplica la actualización con un solo click
+The main idea is inspired by [**Better xCloud**](https://github.com/redphx/better-xcloud) by **@redphx**, an incredible project that does the same for Xbox Cloud Gaming. All credit for the original concept belongs to that project. Better GFN is an independent adaptation specifically aimed at GeForce NOW.
 
 ---
 
-## Instalación
+## Current features (v1.1.0)
+
+### 🕐 Session timer
+- Real-time clock always visible
+- Active session time counter and remaining time with progress bar
+- Automatic alerts at 50 min (yellow) and 55 min (red)
+- Timer persists across page reloads — session continues from where it left off
+- Auto-reset when GFN detects a new session
+
+### 🌐 Smart pre-game
+- Automatic analysis of all 22 GFN servers before launching a game
+- Real-time ping to each server via direct RTT measurement
+- Real-time queue data via the PrintedWaste API
+- Best server recommendation based on ping, queue, or both combined
+- Appears below the PLAY button on each game's page
+
+### 🎮 Controller optimization
+- Automatic controller type detection: Xbox, PlayStation, Nintendo, Generic
+- Button remapping to the Xbox standard GFN expects
+- Adjustable **high-frequency polling** to reduce input lag over Bluetooth:
+  - Native (~60 Hz)
+  - High (~120 Hz)
+  - Ultra (~250 Hz) — recommended for Bluetooth
+  - Max (no limit)
+- A↔B swap for PlayStation controllers
+
+### 🎨 Theme system
+- 8 built-in presets: OLED Black, Nord, Dracula, Catppuccin, Tokyo Night, One Dark, Solarized, NVIDIA Green
+- Custom theme editor with color picker for each UI element
+- Live preview before saving
+- Export / import themes as JSON
+
+### 📊 Fullscreen widgets
+- 10 widget types: Ping, FPS, Bitrate, Resolution, Session time, Remaining time, Clock, Connection health, Jitter, Packet loss
+- 6 configurable screen positions
+- Color options: use active theme accent or a fully custom color
+
+### 🌍 Language support
+- Spanish and English built-in
+- Automatic browser language detection
+- Exportable / importable language system as JSON — the community can add new languages
+- Quick selection buttons: AUTO / ES / EN
+
+### 🔔 VPN & region
+- Automatic notice when a session is established: *"You can now disconnect your VPN"*
+- Toggle to enable or disable the notice
+- Informational text about region restrictions with a link to the issue tracker
+
+### ⚙️ Full configuration
+- Bottom slide-up panel with all settings
+- Export / import complete configuration as JSON (includes themes, widgets, timer, controller)
+- All settings saved automatically to localStorage
+
+### 🔄 Auto-updater
+- Automatically detects when a new version is available on GitHub
+- **Tampermonkey:** automatic update via `@updateURL`
+- **Kiwi / APK:** banner with direct download link for the new ZIP
+
+---
+
+## Installation
 
 <p align="center">
   <a href="https://github.com/karmadev0/better-geforce-now/releases/latest">
-    <img src="https://img.shields.io/badge/⬇%20IR%20A%20RELEASES-76b900?style=for-the-badge&labelColor=0d1117" alt="Releases">
+    <img src="https://img.shields.io/badge/⬇%20GO%20TO%20RELEASES-76b900?style=for-the-badge&labelColor=0d1117" alt="Releases">
   </a>
 </p>
 
-### Opción A — Navegadores Chrome (PC / Android)
-1. Instala [Tampermonkey](https://www.tampermonkey.net/) desde la tienda de extensiones
-2. En Chrome ve a `chrome://extensions/` → Tampermonkey → **Detalles** → activa **"Permitir secuencias de comandos del usuario"**
-3. Abre el archivo `.user.js` de la última release
-4. Tampermonkey detecta el script automáticamente → click en **Instalar**
+### Option A — Kiwi Browser (Android)
+1. Download `bgfn-extension.zip` from the [latest release](https://github.com/karmadev0/better-geforce-now/releases/latest)
+2. Open Kiwi Browser → `chrome://extensions/`
+3. Enable **Developer mode**
+4. Tap **`+ (from .zip/.crx/.user.js)`**
+5. Select the downloaded ZIP
 
-> El script se actualiza automáticamente cuando hay una nueva versión.
+### Option B — Tampermonkey (any browser)
+1. Install [Tampermonkey](https://www.tampermonkey.net/) in your browser
+2. Download `better-gfn.user.js` from the [latest release](https://github.com/karmadev0/better-geforce-now/releases/latest)
+3. Tampermonkey will detect the script automatically and ask for confirmation
+4. Future updates will install automatically
 
-### Opción B — Kiwi Browser (Android) — sin Tampermonkey
-1. Descarga el ZIP de la última release
-2. Abre Kiwi Browser → `chrome://extensions/`
-3. Activa **Modo desarrollador**
-4. Click en **`+ (from .zip/.crx/.user.js)`**
-5. Selecciona el ZIP descargado
-
-### Opción C — APK Android
-1. Ve a la última release y descarga el archivo APK
-2. Instala el APK en tu dispositivo (necesitas permitir fuentes desconocidas)
+### Option C — Android APK
+1. Go to the [latest release](https://github.com/karmadev0/better-geforce-now/releases/latest) and download the APK
+2. Install the APK on your device (you need to allow unknown sources)
 
 ---
 
 ## Roadmap
 
-### v1.1.0 — Estadísticas, temas e historial
-- [ ] Sistema de widgets configurables con posiciones (arriba izquierda, centro, abajo derecha, etc)
-- [ ] Estadísticas completas del stream — latencia, bitrate, FPS, calidad de conexión, salud del servidor
-- [ ] Auto-reportes de lag con timestamp y servidor
-- [ ] Historial real de juego — tiempo jugado por título detectando actividad real
-- [ ] Pre-juego inteligente — ping a todos los servidores antes de lanzar con recomendación automática
-- [ ] Sistema de temas — modo oscuro OLED, modo claro, monocromático, y editor de tema propio con CSS o sliders
-- [ ] Exportar / importar configuración completa en JSON
+### v1.1.0 ✅ Released
+- [x] Smart pre-game — real-time ping + queue to all 22 servers with automatic recommendation
+- [x] Theme system — 8 presets + custom editor + export/import JSON
+- [x] Fullscreen widgets — 10 types, 6 positions, custom colors
+- [x] Language system — ES/EN built-in, community-extensible via JSON
+- [x] Full config export/import as JSON
+- [x] Auto-updater — Tampermonkey automatic, Kiwi/APK banner with direct download
 
-### v1.2.0 — Biblioteca y comunidad
-- [ ] Biblioteca personalizada con colecciones, categorías e iconos por juego
-- [ ] Notas privadas por juego
-- [ ] BGFN Community — DB anónima en tiempo real con juegos más jugados y latencias de la comunidad
-- [ ] Perfiles de usuario opcionales para sincronizar config entre dispositivos
-- [ ] Soporte de múltiples idiomas
+### v1.2.0 — In development
+- [ ] **Active server detection** — read the currently selected server from GFN settings
+- [ ] **Smart comparison** — pre-game shows ✓ or ⚠ comparing your active server with the recommended one
+- [ ] **Real session history** — log game title, play time and server per session
+- [ ] **APK JS auto-updater** — script updates automatically without reinstalling the app
+- [ ] **Microphone support in APK** — runtime permission request so voice works over WebRTC
 
-### v1.3.0 — Controles y logros
-- [ ] Remapeo completo del OSC táctil de GFN en móvil
-- [ ] Perfiles de layout de controles táctiles guardables por juego
-- [ ] Integración con mando físico usando táctiles de 0 input lag
-- [ ] Overlay de logros — interceptar notificaciones del SW de GFN
-- [ ] Historial de logros por juego con fecha y sesión
+### v1.3.0 — Touch controls & achievements
+- [ ] Customizable touch buttons in fullscreen
+- [ ] Per-game control layout profiles
+- [ ] Session achievement system with timestamp and server info
+- [ ] Keyboard / controller shortcuts without leaving the game
 
-### v1.4.0 — Sesión continua e integración
-- [ ] Sesión continua — abrir cola en background antes de que termine la sesión actual
-- [ ] Transición casi sin corte entre sesiones
-- [ ] Integración con Discord — estado con juego y tiempo de sesión
-- [ ] Notificaciones nativas de Android
+### v1.4.0 — Notifications & integrations
+- [ ] Discord webhooks — notify on session start / end with game name and duration
+- [ ] Native Android OS notifications
+- [ ] Continuous session mode — open queue in background before current session expires
 
-### Futuro
-- [ ] Modo streaming — ocultar UI de BGFN para grabaciones
-- [ ] Modo accesibilidad — contraste, tamaño de texto, pantallas pequeñas
-- [ ] Atajos de teclado/mando sin salir del juego
-- [ ] Selector automático del mejor servidor con datos de la comunidad
-- [ ] Investigar elusión del bloqueo de IP desde la app
-- [ ] Alertas cuando un juego vuelve al catálogo de GFN
-- [ ] Mini documentación dentro del panel
-- [ ] Wiki en GitHub con guías y FAQ
+### v1.5.0 — Community hub
+- [ ] Online theme gallery shared by the community
+- [ ] Download and install community themes directly from the panel
+- [ ] Share your custom theme with one click
+- [ ] Anonymous real-time community DB — most played games and server latencies
 
----
-
-## Aviso legal
-
-El uso indebido de esta herramienta es responsabilidad exclusiva del usuario.
-Better GFN está diseñado únicamente para mejorar la experiencia de juego en GeForce NOW.
-GeForce NOW y todos sus servicios son propiedad de **NVIDIA Corporation**.
-Better GFN no está afiliado ni respaldado por NVIDIA.
-
-La idea original del concepto pertenece al proyecto [**Better xCloud**](https://github.com/redphx/better-xcloud) de **@redphx**.
+### Future
+- [ ] Stream mode — hide Better GFN UI during recordings
+- [ ] Accessibility mode — contrast, text size, small screen support
+- [ ] Force maximum available resolution and bitrate
+- [ ] Automatic best-server selector using community latency data
+- [ ] Alert when a game returns to the GFN catalog
+- [ ] Investigate region IP bypass directly from the app
+- [ ] Built-in mini documentation panel
+- [ ] GitHub Wiki with guides and FAQ
 
 ---
 
-**Karmadev0**
-Si tienes ideas, sugerencias o encuentras bugs, abre un Issue en este repo.
+## Contributing
+
+If you have ideas, find bugs, or want to add a new language:
+
+1. **Issues:** open an issue with your bug report or suggestion
+2. **Languages:** export the language JSON from the Better GFN panel (LANGUAGE section → Export), translate it, and send it as a Pull Request or attach it to an issue
+3. **Pull Requests:** always welcome
+
+---
+
+## Legal notice
+
+Misuse of this tool is the sole responsibility of the user.  
+Better GFN is designed solely to improve the gaming experience on GeForce NOW.  
+GeForce NOW and all its services are property of **NVIDIA Corporation**.  
+Better GFN is not affiliated with or endorsed by NVIDIA.
+
+The original concept belongs to the [**Better xCloud**](https://github.com/redphx/better-xcloud) project by **@redphx**.
+
+---
+
+**Karmadev0** — If you have ideas or find bugs, open an [issue](https://github.com/karmadev0/better-geforce-now/issues).
+ 
